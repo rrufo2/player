@@ -33,7 +33,7 @@ class UIMockup(arcade.Window):
             print("Поставили на паузу")
             self.check = False
         else:
-            print("Сняли с паузы пук")
+            print("Сняли с паузы")
             self.check = True
 
     def on_click_next(self,event):
