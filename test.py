@@ -1,7 +1,9 @@
 import arcade
 from arcade.experimental.uislider import UISlider
 from arcade.gui import UIManager, UIAnchorWidget, UILabel
-
+from music import Play
+from music import Play_List
+track2 = Play("music/", "Aberraciya_-_Prodolzhaem_bojj_(musmore.org).mp3", ".mp3",0 )
 class UIMockup(arcade.Window):
     def __init__(self):
 
@@ -30,17 +32,21 @@ class UIMockup(arcade.Window):
 
     def on_click_pause(self,event):
         if self.check:
+            track2.play()
             print("Поставили на паузу")
             self.check = False
         else:
+            track2.pause()
             print("Сняли с паузы")
             self.check = True
 
     def on_click_next(self,event):
+        Play_List.next_play(self)
         print("След трек")
 
     def on_click_pre(self,event):
         print("Пред трек")
+        Play_List.back_play(self)
 
 
     def on_draw(self):
