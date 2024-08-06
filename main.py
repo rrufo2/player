@@ -31,7 +31,7 @@ class Track_now(Music):
     def pause(self):
         self.player.pause()
 
-    def set_time(self,value):
+    def set_time(self, value):
         self.player.seek(value)
 
     def return_name(self):
