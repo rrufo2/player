@@ -10,21 +10,22 @@ from main import Track
 class App(Tk.CTk):
     def __init__(self):
         super().__init__()
+        self.queue_tracks = 0
         self.default_playlist = Play_List("Стандартный")
-        self.test = self.default_playlist.name_to_list()[0]
+        self.test = self.default_playlist.name_to_list()[self.queue_tracks]
         self.music = Track(self.test)
 
         self._fg_color = "#252a2b"
         self._set_appearance_mode("dark")
         self.title("Плеер музыки")
-        self.geometry("600x400")
-        self.minsize(600, 400)
+        self.geometry("700x500")
+        self.resizable(False, False)
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=2)
 
         self.rowconfigure(0, weight=4)
-        self.rowconfigure(1, weight=0)
+        self.rowconfigure(1, weight=1)
 
         self.tc = "#3e9cfa"
         self.bc = "#3b3c40"
@@ -41,7 +42,7 @@ class App(Tk.CTk):
 
         #Фрейм выбора плейлиста
         self.LB_panel = Tk.CTkFrame(master=self, fg_color="transparent")
-        self.LB_panel.grid(row=1, column=0, sticky="nsew", padx=(10,10), pady=(10,10))
+        self.LB_panel.grid(row=1, column=0, sticky="ew", padx=(10,10), pady=(10,10))
         self.LB_panel.grid_columnconfigure(0, weight=1)
         self.LB_panel.grid_rowconfigure(0, weight=1)
 
@@ -56,6 +57,7 @@ class App(Tk.CTk):
                                         fg_color=self.bgc)
         self.bottom_panel.grid(row=1,column=1,sticky="nsew", padx=(10, 10), pady=(10, 10))
         self.bottom_panel.grid_columnconfigure((0, 1, 2, 3, 4, 5), weight=1)
+        self.bottom_panel.grid_rowconfigure(0, weight=1)
 
         #Выбор плейлиста(Левый низ)
         self.list_playlists = Tk.CTkComboBox(master=self.LB_panel, values=["Трек1","Трек2","Трек3","Трек4"],
@@ -99,7 +101,7 @@ class App(Tk.CTk):
         # Нижнее меню(плей, громкость, след\пред трек, инфа)
         self.setting_button = Tk.CTkButton(master=self.bottom_panel, command=self.setting, text="Settings",
                                    corner_radius=10, width=10, text_color=self.tc, fg_color=self.bc)
-        self.setting_button.grid(row=0, column=0, padx=(5, 5))
+        self.setting_button.grid(row=0, column=0, padx=(5, 5), sticky="sn")
 
         self.pre_button = Tk.CTkButton(master=self.bottom_panel, command=self.pre_track, text="Pre",
                                    corner_radius=10, width=10, text_color=self.tc, fg_color=self.bc)
@@ -125,6 +127,13 @@ class App(Tk.CTk):
         self.music.play()
 
     def pre_track(self):
+        if self.queue_tracks == 0:
+            self.queue_tracks = len(self.default_playlist.name_to_list()) - 1
+        else:
+            self.queue_tracks -= 1
+        print(self.queue_tracks)
+        self.source = self.default_playlist.name_to_list()[self.queue_tracks]
+        self.music.play_new_track(self.source)
         print("Пред трек")
 
     def next_track(self):
@@ -142,7 +151,6 @@ class App(Tk.CTk):
     def set_value_track(self, value):
         self.this_second.configure(text = f"{int(self.value_slider._value * 176 // 60)}"
                                           f".{int(round(self.value_slider._value * 176 % 60, 2))}")
-        print(self.value_slider._value)
 
 
     def add_track(self):

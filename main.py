@@ -22,11 +22,14 @@ class Play_List():
             self.lists = [self.lists.rstrip() for self.lists in self.file]
         return self.lists
 
-    def add_track(self,track):
+    def add_track(self, track):
         self.file = open(f"playlists/{self.name}.txt", "a")
         for i in track:
             self.file.write(f"{i}\n")
         self.file.close()
+
+    def rem_track(self, track):
+        self.file = open(f"playlists/{self.name}.txt", "a")
 
     def create_playlist(self):
         pass
@@ -37,6 +40,13 @@ class Track():
         self.player = pyglet.media.Player()
         self.source = pyglet.media.load(self.path)
         self.player.queue(self.source)
+
+    def play_new_track(self, track):
+        self.player.pause()
+        self.source = pyglet.media.load(f"music/{track}")
+        self.player.delete()
+        self.player.queue(self.source)
+        self.player.play()
 
     def play(self):
         if self.player.playing:
@@ -61,3 +71,7 @@ class Track():
 
     def set_volume(self, value_volume):
         self.player.volume = value_volume/100
+
+    def next_track(self, track):
+        self.source = pyglet.media.load(f"music/{track}")
+        self.player.queue(self.source)
