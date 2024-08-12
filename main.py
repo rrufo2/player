@@ -2,8 +2,9 @@ import pyglet
 import sys
 import os
 
-class Play_List():
-    def __init__(self,name):
+
+class Play_List:
+    def __init__(self, name):
         self.name = name
         if os.path.exists(f"Playlists/{self.name}"):
             pass
@@ -24,8 +25,12 @@ class Play_List():
 
     def add_track(self, track):
         self.file = open(f"playlists/{self.name}.txt", "a")
+        self.tracks_in_file = set(open(f"playlists/{self.name}.txt", "r").readlines())
         for i in track:
-            self.file.write(f"{i}\n")
+            if i + "\n" in self.tracks_in_file:
+                pass
+            else:
+                self.file.write(f"{i}\n")
         self.file.close()
 
     def rem_track(self, track):
@@ -34,7 +39,8 @@ class Play_List():
     def create_playlist(self):
         pass
 
-class Track():
+
+class Track:
     def __init__(self, track):
         self.path = f"music/{track}"
         self.player = pyglet.media.Player()
@@ -43,12 +49,14 @@ class Track():
 
     def play_new_track(self, track):
         self.player.pause()
-        self.source = pyglet.media.load(f"music/{track}")
         self.player.delete()
+        self.source = pyglet.media.load(f"music/{track}")
         self.player.queue(self.source)
+        print(self.player.source)
+        self.player.next_source()
         self.player.play()
 
-    def play(self):
+    def play_pause(self):
         if self.player.playing:
             self.player.pause()
         else:
@@ -60,18 +68,12 @@ class Track():
     def return_length(self):
         return self.source.duration
 
-    def pause(self):
-        self.player.pause()
-
     def set_time(self, value):
         self.player.seek(value)
+        self.player.play()
 
     def return_time(self):
         return self.player.time
 
     def set_volume(self, value_volume):
-        self.player.volume = value_volume/100
-
-    def next_track(self, track):
-        self.source = pyglet.media.load(f"music/{track}")
-        self.player.queue(self.source)
+        self.player.volume = value_volume
