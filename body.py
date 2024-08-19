@@ -1,10 +1,10 @@
 import customtkinter as Tk
 import os
 from PIL import Image
+from copy import deepcopy
 
 from main import Play_List
 from main import Track
-
 
 class App(Tk.CTk):
     def __init__(self):
@@ -112,7 +112,7 @@ class App(Tk.CTk):
         self.length_track.grid(row=1, column=1, padx=(10, 10), sticky="se")
 
         # Нижнее меню(плей, громкость, след\пред трек, инфа)
-        self.setting_button = Tk.CTkButton(master=self.bottom_panel, command=self.setting, text="Settings",
+        self.setting_button = Tk.CTkButton(master=self.bottom_panel, command=self.setting, text="Loop",
                                            corner_radius=10, width=10, text_color=self.tc, fg_color=self.bc)
         self.setting_button.grid(row=0, column=0, padx=(5, 5))
 
@@ -169,7 +169,12 @@ class App(Tk.CTk):
         self.music.set_volume(round(value, 2))
 
     def setting(self):
-        print("Настройтки")
+        if self.music.player.loop:
+            self.music.player.loop = False
+            print("Лупа")
+        else:
+            self.music.player.loop = True
+            print("Залупа")
 
     def get_track(self, choice):
         print(f"Сейчас играет {choice}")
@@ -210,7 +215,12 @@ class App(Tk.CTk):
         else:
             return f"{round(value) // 60}.{round(value) % 60}"
 
+    def update_time_slider(self):
+        pass
+
+
 
 if __name__ == "__main__":
     app = App()
     app.mainloop()
+

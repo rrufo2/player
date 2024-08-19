@@ -69,7 +69,7 @@ class Track:
         return self.source.duration
 
     def set_time(self, value):
-        self.player.seek(value)
+        self.player.seek(int(value))
         self.player.play()
 
     def return_time(self):
@@ -77,3 +77,6 @@ class Track:
 
     def set_volume(self, value_volume):
         self.player.volume = value_volume
+
+
+
